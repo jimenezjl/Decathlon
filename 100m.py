@@ -1,63 +1,48 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Aug 28 13:13:33 2020
-
-@author: jose
-"""
-
 import random
 
-print('BIENVENIDOS A LA PRIMERA PRUEBA DEL DECATHLON: LOS 100 METROS LISOS')
-print('¿Cómo se juega?')
-print('Dispones de dos grupos de 4 dados y 7 tiradas en total.', 'Tras lanzar el primer grupo de dados puedes elegir si te gusta el resultado','y comienzas a lanzar el siguiente grupo','o si continúas lanzando el primer grupo.','Un resultado 6 en cualquier dado invalida ese lanzamiento.',sep=('\n'))
-print('')
-print('Pulsa Intro para lanzar tu primer grupo de dados.')
-input()
-for tirada in range (6):
-    dado1=random.randint(1,6)
-    dado2=random.randint(1,6)
-    dado3=random.randint(1,6)
-    dado4=random.randint(1,6)
-    sumatirada = dado1 + dado2 + dado3 + dado4
-    print('El resultado de tu tirada '+str(tirada+1)+' ha sido '+str(dado1)+','+str(dado2)+','+str(dado3)+','+str(dado4)+'.')
-    if tirada != 6:
-        if dado1 == 6 or dado2 == 6 or dado3 == 6 or dado4 == 6:
-            print('Tu tirada '+str(tirada+1)+' tiene un 6, así que tienes que volver a tirar.')
-            input('Pulsa cualquier tecla para continuar')
+def diceroll():
+    return random.randint(1, 6)
+
+# Primer ciclo de lanzamientos
+num_lanzamientos = 1
+lanzamiento_valido = False
+while num_lanzamientos <= 7 and not lanzamiento_valido:
+    dados = [diceroll() for _ in range(4)]
+    suma_dados = sum(dados)
+    print(f"Resultado del lanzamiento {num_lanzamientos}: {dados}. Suma total: {suma_dados}")
+
+    if 6 not in dados:
+        guardar_resultado = input("¿Quieres guardar este resultado? (s/n): ")
+        if guardar_resultado.lower() == 's':
+            cincuentam = suma_dados
+            lanzamiento_valido = True
         else:
-            print('La suma total de tu tirada es '+str(sumatirada)+'.')
-            print('¿Quieres repetir la tirada(s/n)')
-            respuesta = input('s/n')
-            if respuesta == 'n': break
+            num_lanzamientos += 1
     else:
-        if dado1 == 6 or dado2 == 6 or dado3 == 6 or dado4 == 6:
-            print('Tu tirada '+str(tirada+1)+' tiene un 6, así que tu resultado final es DNF.')
-        else:
-            print('El resultado final de tu carrera es '+str(sumatirada)+'.')
-if tirada != 6:
-    for tirada2 in range(6-tirada):
-        dado5=random.randint(1,6)
-        dado6=random.randint(1,6)
-        dado7=random.randint(1,6)
-        dado8=random.randint(1,6)
-        sumatirada2 = dado5 + dado6 + dado7 + dado8
-        sumatotal= sumatirada+sumatirada2
-        print('El resultado de tu tirada '+str(tirada+1)+' ha sido '+str(dado5)+','+str(dado6)+','+str(dado7)+','+str(dado8)+'.')
-        if tirada + tirada2 != 6:
-            if dado5 == 6 or dado6 == 6 or dado7 == 6 or dado8 == 6:
-                print('Tu tirada '+str(tirada+tirada2+2)+' tiene un 6, así que tienes que repetirla.')
-                input('Pulsa cualquier tecla para continuar')
+        print(f"Al menos uno de los dados ha sido un 6, debes volver a lanzar los dados. Recuerda que tienes un máximo de 7 lanzamientos y este es tu lanzamiento número {num_lanzamientos}")
+        num_lanzamientos += 1
+
+# Segundo ciclo de lanzamientos
+if lanzamiento_valido:
+    num_lanzamientos = 1
+    suma_total = cincuentam
+    while num_lanzamientos <= 7:
+        dados = [diceroll() for _ in range(4)]
+        suma_dados = sum(dados)
+        print(f"Resultado del lanzamiento {num_lanzamientos}: {dados}. Suma total: {suma_dados + suma_total}")
+
+        if 6 not in dados:
+            guardar_resultado = input("¿Quieres guardar este resultado? (s/n): ")
+            if guardar_resultado.lower() == 's':
+                suma_total += suma_dados
+                break
             else:
-                print('La suma total de tu tirada es '+str(sumatirada2)+'.')
-                print('El resultado de tu carrera sería '+str(sumatotal))
-                print('¿Quieres repetir la tirada(s/n)')
-                respuesta = input('s/n')
-                if respuesta == 'n':
-                    print('El resultado final de tu carrera es '+str(sumatotal)+'.')
-                    break
-                else:
-                    if dado5 == 6 or dado6 == 6 or dado7 == 6 or dado8 == 6: 
-                        print('Tu tirada '+str(tirada+tirada2+2)+' tiene un 6, así que tu resultado final es DNF.')
-                        break
-                    break
+                num_lanzamientos += 1
+        else:
+            if num_lanzamientos == 7:
+                print("Error: se ha alcanzado el máximo de lanzamientos y se ha obtenido un 6")
+                break
+            print(f"Al menos uno de los dados ha sido un 6, debes volver a lanzar los dados. Recuerda que tienes un máximo de 7 lanzamientos y este es tu lanzamiento número {num_lanzamientos}")
+            num_lanzamientos += 1
+
+    print(f"Suma total: {suma_total}")
