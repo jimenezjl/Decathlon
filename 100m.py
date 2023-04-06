@@ -22,9 +22,8 @@ while num_lanzamientos <= 7 and not lanzamiento_valido:
         print(f"Al menos uno de los dados ha sido un 6, debes volver a lanzar los dados. Recuerda que tienes un máximo de 7 lanzamientos y este es tu lanzamiento número {num_lanzamientos}")
         num_lanzamientos += 1
 
-# Segundo ciclo de lanzamientos
+# Segundo ciclo de lanzamientos sin reiniciar el contador de lanzamientos
 if lanzamiento_valido:
-    num_lanzamientos = 1
     suma_total = cincuentam
     while num_lanzamientos <= 7:
         dados = [diceroll() for _ in range(4)]
